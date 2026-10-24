@@ -1,4 +1,3 @@
-
 name: Pipeline de CI/CD
 
 on: [push] # Inicia o pipeline quando houver um push
@@ -11,7 +10,7 @@ jobs:
       - name: Inicio
         run: echo "Pipeline iniciado"
 
-teste:
+  teste:
     name: Job 2 - Teste
     runs-on: ubuntu-latest
     needs: preparacao
