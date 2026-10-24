@@ -1,0 +1,376 @@
+Parte Teórica — Workflows e Pipelines de CI/CD
+1. O que é um workflow?
+Um workflow é um fluxo automatizado de atividades que define uma sequência de ações a serem executadas em um projeto de software. Ele permite automatizar tarefas como compilação, execução de testes, análise de código e implantação de aplicações.
+
+Em plataformas como GitHub e GitLab, os workflows são definidos por meio de arquivos de configuração que especificam quando a automação deve ser iniciada, quais tarefas devem ser executadas e quais condições precisam ser atendidas.
+
+2. Qual é a finalidade de um workflow?
+A principal finalidade de um workflow é automatizar processos de desenvolvimento de software, reduzindo a necessidade de intervenções manuais e aumentando a eficiência, a padronização e a confiabilidade das entregas.
+
+Entre seus principais objetivos, destacam-se:
+
+Automatizar a compilação e os testes do código.
+
+Identificar erros antes que as alterações sejam integradas ao projeto.
+
+Padronizar os procedimentos de desenvolvimento.
+
+Facilitar a integração contínua e a entrega ou implantação contínua (CI/CD).
+
+Reduzir erros humanos e agilizar o processo de publicação de novas versões.
+
+3. Quando um workflow é executado?
+Um workflow é executado quando ocorre um evento definido em sua configuração ou quando é iniciado manualmente, caso essa possibilidade tenha sido habilitada.
+
+Por exemplo, um workflow pode ser executado quando um desenvolvedor envia alterações ao repositório, abre uma solicitação de integração de código ou solicita a execução manual de uma rotina.
+
+A execução também pode ser programada para ocorrer em horários específicos, conforme os recursos disponíveis na plataforma utilizada.
+
+4. Onde um workflow é configurado no GitHub/GitLab?
+A configuração depende da plataforma utilizada.
+
+GitHub Actions: os workflows são armazenados em arquivos YAML no diretório .github/workflows/ do repositório. Por exemplo: .github/workflows/ci.yml.
+
+GitLab CI/CD: a configuração normalmente é armazenada no arquivo .gitlab-ci.yml, localizado na raiz do repositório.
+
+Esses arquivos descrevem os eventos que iniciam a automação, os jobs, os comandos e as condições de execução do pipeline.
+
+5. O que são eventos em um pipeline?
+Eventos são ocorrências que podem iniciar ou influenciar a execução de um workflow ou pipeline. Eles funcionam como gatilhos (triggers), indicando à plataforma quando determinadas tarefas devem ser realizadas.
+
+Por exemplo, o envio de alterações ao repositório pode desencadear um processo de compilação e testes para verificar se o código continua funcionando corretamente.
+
+6. Quais eventos podem iniciar uma execução?
+Os eventos variam conforme a plataforma e a configuração adotada. Entre os mais comuns estão:
+
+Push: envio de alterações para uma branch ou referência do repositório.
+
+Pull Request: abertura, atualização ou reabertura de uma solicitação de integração de código no GitHub.
+
+Merge Request: solicitação de integração de código no GitLab.
+
+Agendamento: execução automática em horários ou intervalos previamente definidos.
+
+Execução manual: acionamento do pipeline por um usuário autorizado.
+
+Publicação de uma versão: criação de uma tag ou release.
+
+Alterações em outros recursos: por exemplo, a conclusão de outro workflow ou a atualização de um ambiente, quando esses eventos são suportados e configurados.
+
+A escolha dos eventos depende dos objetivos do projeto e das etapas que precisam ser automatizadas.
+
+7. Qual é a diferença entre executar um pipeline após um push e após um pull request?
+A diferença está no momento em que a automação é iniciada e na finalidade da verificação.
+
+Após um push: o pipeline é executado quando alterações são enviadas ao repositório. Seu objetivo pode ser verificar se o código enviado compila, passa nos testes e atende aos critérios de qualidade.
+
+Após um pull request: o pipeline é executado durante o processo de proposta de integração de alterações entre branches. Nesse caso, a finalidade é verificar se as mudanças propostas podem ser integradas sem introduzir erros, antes de serem incorporadas à branch de destino.
+
+Portanto, o evento de push verifica alterações enviadas, enquanto o evento de pull request permite avaliar as mudanças propostas para integração. Ambos podem executar testes semelhantes, mas o contexto e as regras de execução são diferentes.
+
+8. O que é um Job?
+Um Job é uma unidade de trabalho dentro de um workflow ou pipeline. Ele reúne uma ou mais instruções que devem ser executadas para realizar uma tarefa específica.
+
+Por exemplo, um job pode ser responsável por compilar o código-fonte, executar testes automatizados ou publicar uma aplicação em um servidor.
+
+No GitHub Actions, cada job é executado em um runner e pode conter várias etapas (steps), executadas normalmente em sequência. No GitLab CI/CD, os jobs também são executados por runners e são organizados conforme a configuração das etapas do pipeline. 
+
+GitHub Docs
++1
+
+9. Um workflow pode possuir vários Jobs?
+Sim. Um workflow pode possuir vários jobs, cada um destinado a uma tarefa específica.
+
+Por exemplo, um workflow pode conter os seguintes jobs:
+
+build: responsável pela compilação do código.
+
+test: responsável pela execução dos testes automatizados.
+
+security: responsável por verificar possíveis vulnerabilidades.
+
+deploy: responsável pela implantação da aplicação.
+
+Essa divisão permite organizar melhor o processo de desenvolvimento, facilitando a identificação de falhas e o acompanhamento da execução.
+
+10. Os Jobs podem depender uns dos outros?
+Sim. Os jobs podem ser configurados para depender da conclusão de outros jobs.
+
+No GitHub Actions, essa dependência pode ser definida pela propriedade needs. No GitLab CI/CD, é possível estabelecer relações entre jobs utilizando recursos como needs, além da organização convencional por stages.
+
+Por exemplo, o job de testes pode depender do job de compilação. Dessa maneira, os testes somente serão executados após a conclusão bem-sucedida da compilação, conforme as regras configuradas. 
+
+GitHub Docs
++1
+
+Por outro lado, quando não existem dependências explícitas ou outras restrições, jobs independentes podem ser executados em paralelo, desde que haja recursos disponíveis.
+
+11. Por que dividir um pipeline em diferentes Jobs?
+A divisão de um pipeline em diferentes jobs contribui para a organização, a eficiência e a manutenção do processo de automação.
+
+As principais vantagens são:
+
+Organização: cada job possui uma responsabilidade bem definida.
+
+Paralelismo: tarefas independentes podem ser executadas simultaneamente.
+
+Identificação de erros: fica mais fácil localizar a etapa que apresentou falha.
+
+Manutenção: alterações em uma tarefa podem ser realizadas sem modificar necessariamente todas as demais.
+
+Controle de execução: é possível estabelecer dependências e condições específicas para cada job.
+
+Segurança: determinadas tarefas, como a implantação em produção, podem receber permissões e controles próprios.
+
+Assim, a divisão adequada dos jobs torna o pipeline mais modular, compreensível e eficiente.
+
+12. O que são Stages ou etapas em pipelines?
+Stages são fases que organizam os jobs de um pipeline conforme a ordem lógica de execução. Cada stage representa uma etapa do processo de desenvolvimento, como compilação, testes ou implantação.
+
+No GitLab CI/CD, os stages estabelecem uma ordem geral de execução: os jobs de uma etapa normalmente precisam terminar com sucesso para que a próxima etapa seja iniciada. Jobs pertencentes ao mesmo stage podem ser executados em paralelo quando existem recursos disponíveis. 
+
+GitLab Docs
++1
+
+É importante distinguir os conceitos:
+
+Workflow: define o processo automatizado e as condições gerais de execução.
+
+Pipeline: representa uma execução organizada desse processo.
+
+Stage: representa uma fase do pipeline.
+
+Job: executa uma tarefa específica.
+
+Step: representa uma ação ou comando dentro de um job, especialmente no GitHub Actions.
+
+No GitHub Actions, a organização sequencial é definida principalmente pelas dependências entre jobs, e não por uma palavra-chave stages equivalente à do GitLab.
+
+13. Como funciona um pipeline Build → Test → Deploy?
+Um pipeline estruturado em Build → Test → Deploy representa um fluxo comum de integração e entrega de software. Seu objetivo é garantir que a aplicação seja preparada, verificada e disponibilizada de forma controlada.
+
+1. Build — Compilação
+Nessa etapa, o sistema instala ou prepara as dependências necessárias e compila o código, quando aplicável. Também pode gerar arquivos executáveis, pacotes ou imagens de contêiner.
+
+Resultado esperado: artefatos prontos para serem verificados e utilizados nas etapas seguintes.
+
+2. Test — Testes
+O sistema executa testes automatizados para verificar se as funcionalidades apresentam o comportamento esperado. Podem ser realizados testes unitários, de integração e de outros tipos, conforme o projeto.
+
+Resultado esperado: evidências de que o código atende aos critérios de qualidade definidos.
+
+3. Deploy — Implantação
+Após a aprovação das etapas anteriores, a aplicação é publicada em um ambiente de homologação ou produção. Essa etapa pode envolver o envio de arquivos, a atualização de serviços ou a implantação de contêineres.
+
+Resultado esperado: aplicação disponibilizada no ambiente de destino.
+
+Exemplo prático
+Considere uma aplicação web desenvolvida por uma equipe. Quando um desenvolvedor envia uma alteração ao repositório, o pipeline é iniciado automaticamente.
+
+O Build verifica se o projeto pode ser compilado e gera os artefatos necessários.
+
+O Test executa os testes automatizados. Se ocorrer uma falha, o pipeline normalmente é interrompido antes da implantação.
+
+O Deploy publica a versão validada no ambiente definido, desde que as condições de execução sejam atendidas.
+
+Essa estrutura reduz o risco de disponibilizar uma versão com erros. Entretanto, o comportamento exato depende das regras configuradas: por exemplo, a implantação em produção pode exigir aprovação manual.
+
+14. O que é um Runner?
+Um Runner é o agente responsável por executar os jobs definidos em um workflow ou pipeline. Ele disponibiliza o ambiente computacional necessário para processar as instruções configuradas.
+
+Esse ambiente pode ser uma máquina física, uma máquina virtual ou um ambiente baseado em contêineres, dependendo da configuração adotada.
+
+No GitHub Actions, o runner recebe e executa os jobs associados aos workflows. No GitLab CI/CD, o runner também é responsável por executar os jobs do pipeline. 
+
+GitHub
++1
+
+15. Qual é a função de um Runner?
+A função de um runner é transformar as instruções definidas no arquivo de configuração em tarefas efetivamente executadas em um ambiente computacional.
+
+Entre suas responsabilidades, estão:
+
+Preparar o ambiente de execução.
+
+Obter o código do repositório quando necessário.
+
+Executar comandos e scripts definidos nos jobs.
+
+Disponibilizar ferramentas e dependências exigidas pelas tarefas.
+
+Registrar os resultados da execução e comunicar o status à plataforma.
+
+Por exemplo, quando um job contém um comando para executar testes automatizados, é o runner que executa esse comando no ambiente configurado.
+
+16. Quem executa os comandos definidos no pipeline?
+Os comandos são executados pelo ambiente de execução disponibilizado pelo runner. A plataforma, como GitHub ou GitLab, coordena o processo, identifica os eventos, organiza os jobs e encaminha as tarefas aos runners apropriados.
+
+Portanto, é importante distinguir as responsabilidades: a plataforma gerencia a automação, enquanto o runner executa efetivamente os comandos e scripts definidos nos jobs.
+
+17. Qual é a diferença entre um runner hospedado pelo serviço e um runner próprio (self-hosted)?
+Existem duas modalidades principais de runners.
+
+Característica
+
+Runner hospedado pelo serviço
+
+Runner próprio (self-hosted)
+
+Gerenciamento
+
+Administrado pelo provedor da plataforma
+
+Administrado pelo usuário ou pela organização
+
+Infraestrutura
+
+Disponibilizada pelo serviço
+
+Utiliza infraestrutura própria ou contratada
+
+Manutenção
+
+Grande parte da manutenção fica sob responsabilidade do provedor
+
+O responsável precisa cuidar da máquina e de seu ambiente
+
+Personalização
+
+Limitada às opções disponibilizadas
+
+Maior controle sobre sistema operacional, ferramentas e hardware
+
+Custos
+
+Dependem dos limites e das regras do serviço
+
+Envolvem os custos de infraestrutura e manutenção
+
+No GitHub Actions, por exemplo, os runners hospedados pelo GitHub oferecem ambientes prontos para a execução de jobs. Já os runners próprios permitem utilizar máquinas configuradas e administradas pela própria equipe. 
+
+GitHub Docs
++1
+
+A escolha depende das necessidades do projeto. Para atividades comuns, um runner hospedado pode simplificar a configuração. Para projetos que exigem ferramentas específicas, acesso a uma rede interna ou hardware especializado, um runner próprio pode ser mais adequado.
+
+18. O que é YAML?
+YAML é um formato de serialização de dados utilizado para representar informações estruturadas de maneira legível por seres humanos e por sistemas computacionais.
+
+A sigla é associada à expressão YAML Ain't Markup Language. Sua estrutura utiliza elementos como pares de chave e valor, listas e níveis de indentação para organizar as informações.
+
+Um exemplo simples é:
+
+
+yaml
+nome: Projeto Web
+linguagem: Python
+testes:
+  - unitarios
+  - integracao
+Nesse exemplo, o nome e a linguagem são propriedades do projeto, enquanto testes representa uma lista com dois elementos.
+
+19. Por que o YAML é utilizado na configuração de pipelines?
+O YAML é utilizado porque permite definir configurações de automação de maneira organizada, relativamente simples e fácil de ler.
+
+Em pipelines, ele possibilita declarar eventos, jobs, etapas, comandos, dependências e outras regras de execução.
+
+Por exemplo, no GitHub Actions, o YAML define os workflows no diretório .github/workflows/. No GitLab CI/CD, o arquivo .gitlab-ci.yml descreve os jobs, os stages e os scripts do pipeline. 
+
+GitHub Docs
++1
+
+Entre suas principais vantagens, estão:
+
+Legibilidade: a estrutura é compreensível sem exigir uma sintaxe de programação extensa.
+
+Organização: os elementos podem ser agrupados hierarquicamente.
+
+Manutenção: as configurações podem ser versionadas junto ao código-fonte.
+
+Padronização: a equipe pode compartilhar e revisar as configurações no repositório.
+
+Automação: as plataformas interpretam os arquivos e utilizam suas informações para executar as tarefas definidas.
+
+20. Qual é a importância da indentação?
+A indentação consiste no uso de espaços no início das linhas para indicar a hierarquia entre os elementos de um arquivo YAML.
+
+Ela é fundamental porque determina quais propriedades pertencem a quais estruturas. Diferentemente de linguagens nas quais blocos são delimitados obrigatoriamente por chaves, a estrutura de blocos do YAML é representada principalmente pela indentação. 
+
+yaml.org
++1
+
+Observe o exemplo:
+
+
+yaml
+jobs:
+  build:
+    steps:
+      - run: echo "Compilando"
+Nesse exemplo:
+
+jobs é o elemento que agrupa os jobs.
+
+build é um job pertencente a jobs.
+
+steps reúne as etapas do job.
+
+run define o comando a ser executado.
+
+Se a indentação for alterada incorretamente, a hierarquia poderá ser interpretada de forma diferente da pretendida.
+
+Por isso, recomenda-se utilizar espaços em vez de tabulações para a indentação e manter os níveis consistentes.
+
+21. O que pode acontecer se a estrutura YAML estiver incorreta?
+Uma estrutura YAML incorreta pode impedir que a plataforma interprete adequadamente o arquivo de configuração, comprometendo a execução do workflow ou pipeline.
+
+As principais consequências incluem:
+
+Erro de sintaxe: o arquivo pode ser rejeitado durante a validação.
+
+Hierarquia incorreta: uma propriedade pode ficar associada ao elemento errado.
+
+Falha na execução: um job ou comando pode não ser executado como esperado.
+
+Configuração inválida: a plataforma pode identificar palavras-chave, valores ou estruturas incompatíveis com suas regras.
+
+Execução indevida: uma configuração incorreta pode alterar as condições de execução e fazer com que tarefas sejam iniciadas ou ignoradas de maneira não planejada.
+
+Por exemplo, considere o seguinte trecho:
+
+
+yaml
+jobs:
+build:
+  steps:
+    - run: echo "Compilando"
+A indentação de build não indica que ele pertence a jobs. Isso pode causar uma falha de validação ou interpretação, conforme o contexto e as regras da plataforma.
+
+A forma corrigida é:
+
+
+yaml
+jobs:
+  build:
+    steps:
+      - run: echo "Compilando"
+Dessa forma, o job build está corretamente subordinado a jobs.
+
+É importante observar que nem todo erro de indentação produz necessariamente uma mensagem de erro de sintaxe: em alguns casos, o arquivo pode continuar sendo YAML válido, mas sua estrutura lógica pode não corresponder à configuração desejada.
+
+Por esse motivo, é recomendável validar os arquivos antes de utilizá-los, revisar as alterações e consultar os registros de execução para identificar possíveis falhas.
+
+Referências bibliográficas
+As informações apresentadas podem ser complementadas pelas seguintes documentações oficiais, consultadas em 23 de outubro de 2026:
+
+1. GITHUB. Workflows — GitHub Actions. Disponível em: Documentação oficial do GitHub Actions .
+
+2. GITHUB. Workflow syntax for GitHub Actions. Disponível em: Referência de sintaxe dos workflows .
+
+3. GITHUB. Self-hosted runners. Disponível em: Documentação sobre runners próprios .
+
+4. GITLAB. CI/CD pipelines. Disponível em: Documentação oficial sobre pipelines .
+
+5. GITLAB. CI/CD YAML syntax reference. Disponível em: Referência de sintaxe YAML do GitLab CI/CD .
+
+6. YAML.ORG. YAML Ain't Markup Language — Specification. Disponível em: Especificação oficial do YAML .
